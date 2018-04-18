@@ -23,6 +23,9 @@ USER INTERFACE:
 - post banner  
 - styling 
 - capture codes
+
+
+
 ADMIN INTERFACE
 - add categories
 - black user
