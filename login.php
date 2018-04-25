@@ -43,8 +43,10 @@
                                                 <label for="password">Password :</label>
                                                 <input class="form-control" type="password" name="password" id="password">
                                             </div>
-                                            <input class="btn btn-primary btn-xl" type="submit" class="btn btn-default" value="Login" name="submit">
-                                        </form>';
+                                            <input class="form-control" type="submit" class="btn btn-default" value="Login" name="submit">
+                                        </form><br>
+                                            <a href="forgotpassword.php"><p>Forgot password</p></a>';
+                                        
                                         }
                                     ?>
 
@@ -60,7 +62,7 @@
         </div>
     </div>
 
-<?php include 'ads.php'?>
+<?php //include 'ads.php'?>
 
 
 </body>

@@ -1,6 +1,7 @@
 <?php
     session_start();
     include 'connect.php';
+    include 'content-function.php';
     $comment = nl2br(addslashes($_POST['comment']));
     $cid = $_GET['cid'];
     $scid = $_GET['scid'];
