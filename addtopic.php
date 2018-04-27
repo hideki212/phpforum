@@ -35,10 +35,13 @@ include 'nav.php';
         <div class="row">
             <div class="col-sm-12">
             <?php
-            include 'content-function.php';
-            if (isset($_SESSION['username'])) {
-                if(isset($_POST['submit'])){
-                    $scid = $_GET['scid'];
+include 'content-function.php';
+if (isset($_SESSION['username'])) {
+    if(isset($_POST['submit'])){
+        $captcha=$_POST['g-recaptcha-response'];
+        $success = recapture($captcha);
+        if($success){
+                               $scid = $_GET['scid'];
                     $cid = $_GET['cid'];
                     $title = $_POST['title'];
                     $content = $_POST['comment'];
@@ -81,43 +84,49 @@ include 'nav.php';
 	}
 	//--file--
                     addtopic($cid, $scid, $title, $content, $fileNameNew, $fileType);
-                }else{
-                    $scid = $_GET['scid'];
-                    $cid = $_GET['cid'];
-                    echo '<div class="row">
-                            <div class="col-12 col-sm-12">
-                                <form action="addtopic.php?cid='.$cid.'&scid='.$scid.'" method="post" enctype="multipart/form-data">
-                                        <h2>Post Your Reply</h2>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label for="title">Title:</label>
-                                                    <input type="text" class="form-control" name="title" id="title">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="comment">Content:</label>
-													<label>Upload Image File:</label><br/>
-										<ul>
-											<li><div class="image-upload">
-											<label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
-											<input name="file" type="file" class="inputFile" id="file-input"></input>
-											</div></li>
-										</ul>
-                                                    <textarea class="form-control" name="comment" id="comment" cols="40" rows="5"></textarea>
-                                                </div>
-                                                <br>
-                                                <input class="btn btn-primary" name="submit" type="submit" value="Post">
-                                            </div>
-                                        </div>
-                                </form>                           
+        }else{
+            echo "<script>alert('recaptcha failed try again')</script>";
+        }
+    }else{
+        $scid = $_GET['scid'];
+        $cid = $_GET['cid'];
+        echo '<div class="row">
+                <div class="col-12 col-sm-12">
+                    <form action="addtopic.php?cid='.$cid.'&scid='.$scid.'" method="post" enctype="multipart/form-data">
+                            <h2>Post Your Reply</h2>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="title">Title:</label>
+                                        <input type="text" class="form-control" name="title" id="title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comment">Content:</label>
+                                        <label>Upload Image File:</label><br/>
+                            <ul>
+                                <li><div class="image-upload">
+                                <label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
+                                <input name="file" type="file" class="inputFile" id="file-input"></input>
+                                </div></li>
+                            </ul>
+                                        <textarea class="form-control" name="comment" id="comment" cols="40" rows="5"></textarea>
+                                    </div>
+                                    <br>
+                                    <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+                    
+                                    </div>
+                                    <input class="btn btn-primary" name="submit" type="submit" value="Post">
+                                </div>
                             </div>
-                        </div>';
-                }
+                    </form>                           
+                </div>
+            </div>';
+    }
 
-            } else {
-                echo '<p>You must be logged in to post a topic</p>
-                        <p><a href="login.php">Login</a> or <a href="register.php">Register</a></p>';
-            }
+} else {
+    echo '<p>You must be logged in to post a topic</p>
+            <p><a href="login.php">Login</a> or <a href="register.php">Register</a></p>';
+}
                 //disptopic($_GET['cid'], $_GET['scid'], $_GET['tid']);
             ?>
             </div>

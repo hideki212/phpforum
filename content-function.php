@@ -149,7 +149,10 @@
 											<label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
 											<input name="file" type="file" class="inputFile" id="file-input"></input>
 											</div></li>
-										</ul>
+                                        </ul>
+                                        <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+                                
+                                        </div>    
                             <input class="btn btn-primary" name="submit" type="submit" value="Reply">
                         </div>
                     </div>
@@ -223,6 +226,66 @@
         }
 
     }
+    function disp_profile($username){
+        include 'connect.php';
+        $select = "SELECT * FROM users WHERE username = '$username'";
+        $query = mysqli_query($connect, $select);
+        $rows = mysqli_num_rows($query);
+        while ($row = mysqli_fetch_assoc($query)) {
+            $db_username = $row['username'];
+            $db_password = $row['password'];
+            $db_email = $row['email'];
+            $db_date = $row['date'];
+            $db_id = $row['id'];
+        }
+        $layout = '
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <p>Your Profile</p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Your Username: </h5>
+                                <p>'.$db_username.'</p>
+                            </div>
 
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Your email: </h5>
+                                <p>'.$db_email.'</p>
+                            </div>
 
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Date Registered</h5>
+                                <p>'.$db_date.'</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div><br>';
+        echo $layout;
+    }
+    function recapture($capture){
+        include 'recaptcha-php-1.9/recaptchalib.php';
+        $captcha=$_POST['g-recaptcha-response'];
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $secretkey = "6LdakFUUAAAAAK4EAAFlOIpmFLEJT1ps1tsrOM3l";					
+        $response   =  file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretkey."&response=".$captcha."&remoteip=".$ip);
+        $responseKeys = json_decode($response,true);	     
+        if(intval($responseKeys["success"]) !== 1) {
+            return false;
+        } else {
+            return true;
+        }	
+    }
 ?>

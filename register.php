@@ -12,6 +12,7 @@
 <body>
 <?php
 include 'nav.php';
+include 'content-function.php';
 ?>
 <div class='content'>
 <div class='row'>
@@ -41,7 +42,11 @@ include 'nav.php';
                                 <div class="form-group">
                                     <label for="email">Email:</label><br><input class="form-control" type="email" name="email" id="email">
                                 </div>
-                                <br><input class="btn btn-primary btn-xl" type="submit" value="Register" name="submit"> or <a href="register.php">Login</a>
+                                <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+                                
+                                </div>';    
+
+                               echo '<br><input class="btn btn-primary btn-xl" type="submit" value="Register" name="submit"> or <a href="register.php">Login</a>
                             </form>';
                             }
                         ?>
@@ -55,7 +60,10 @@ include 'nav.php';
         </div>
         <div class="col-sm-2"></div>
     </div>
-    <?php include 'ads.php'?>
+    <?php 
+    //include 'ads.php'
+    
+    ?>
   </div>
 </div>
 </body>
@@ -73,37 +81,45 @@ if (isset($_GET['error'])) {
     }
 }
 if (isset($_POST['submit'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $passwordconfirm = $_POST['passwordconfirm'];
-    $email = $_POST['email'];
-    $date = date('Y-m-d H:i:s');
-    if ($username && $password && $passwordconfirm && $email) {
-        if (strlen($username) >= 5 && strlen($username) <= 50) {
-            if (strlen($password) >= 5 && strlen($password) <= 50) {
-                if ($password != $passwordconfirm) {
-                    echo "<p>Passwords do not match</p>";
-                } else {
-                    $shapass = sha1($password);
-                    $insert = "INSERT INTO users(username, password, email, date) 
-                    VALUES('$username','$shapass','$email', '$date')";
-                    if ($connect->query($insert) === true) {
-                        header('Location: /index.php/reg-success');
-                        //echo "New record created successfully<br> ". "<a style='text-decoration:underline;' href='/index.html' >Go to Login</a>";
+    // Your code here to handle a successful verification
+    $captcha=$_POST['g-recaptcha-response'];
+    $success = recapture($captcha);
+    if($success){
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $passwordconfirm = $_POST['passwordconfirm'];
+        $email = $_POST['email'];
+        $date = date('Y-m-d H:i:s');
+        if ($username && $password && $passwordconfirm && $email) {
+            if (strlen($username) >= 5 && strlen($username) <= 50) {
+                if (strlen($password) >= 5 && strlen($password) <= 50) {
+                    if ($password != $passwordconfirm) {
+                        echo "<script>alert('Passwords do not match');</script>";
                     } else {
-                        header('Location: /register.php/reg-failed/' . $connect->error);
-                        //echo "Error: " . $insert . "<br>" . $connect->error . 
-                        //"<a style='text-decoration:underline;' href='/register.html' >Go Back to register page</a>";
+                        $shapass = sha1($password);
+                        $insert = "INSERT INTO users(username, password, email, date, replies) 
+                        VALUES('$username','$shapass','$email', '$date', 0)";
+                        if ($connect->query($insert) === true) {
+                            header('Location: /index.php/reg-success');
+                            //echo "New record created successfully<br> ". "<a style='text-decoration:underline;' href='/index.html' >Go to Login</a>";
+                        } else {
+                            header('Location: /register.php/reg-failed/' . $connect->error);
+                            //echo "Error: " . $insert . "<br>" . $connect->error . 
+                            //"<a style='text-decoration:underline;' href='/register.html' >Go Back to register page</a>";
+                        }
                     }
+                } else {
+                    echo '<script>alert("password must be between 5 and 50 characters");</script>';
                 }
+    
             } else {
-                echo 'password must be between 5 and 50 characters';
+                echo '<script>alert("username must be between 5 and 50 characters");</script>';
             }
-
-        } else {
-            echo 'username must be between 5 and 50 characters';
-        }
+        }     
+    }else{
+        echo "<script>alert('recaptcha failed try again')</script>";
     }
-    $connect->close();
+  	
+$connect->close();
 }
 ?>

@@ -6,8 +6,9 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="js/bootstrap.js"></script>
-<script src="js/custom.js"></script>
-<script src="js/freelancer.js"></script>
+<!-- <script src="js/custom.js"></script>
+<script src="js/freelancer.js"></script> -->
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/styles/main.css">
 <meta name="exoclick-site-verification" content="2891f28d79f0d85f18fbf7dfc6ed15b1">
