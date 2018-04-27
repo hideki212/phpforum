@@ -106,7 +106,7 @@
             echo "<div class='panel-body'><p>". $row['Content'] ."</p></div>";
 			
 			if($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4'){
-			echo "<video width='320' height='240' controls>
+			echo "<div><video width='320' height='240' controls>
 				<source src='uploads/videos/$name' type='$type'>
 				Your browser does not support the video tag.
 				</video></div> ";
@@ -114,8 +114,8 @@
 				
 			}
 				
-			if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf'){
-			echo "<img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
+			if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf' || $type == 'image/gif'){
+			echo "<div><img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
 			}else{
 				
 			}
@@ -179,7 +179,7 @@
 					echo "<div class='panel-body'><p>". $row['Reply'] ."</p></div>";
 					
 				if($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4'){
-				echo "<video width='320' height='240' controls>
+				echo "<div><video width='320' height='240' controls>
 					<source src='uploads/videos/$name' type='$type'>
 					Your browser does not support the video tag.
 					</video></div> ";
@@ -187,8 +187,8 @@
 					
 				}
 					
-				if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf'){
-				echo "<img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
+				if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf' || $type == 'image/gif'){
+				echo "<div><img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
 				}else{
 					
 				}

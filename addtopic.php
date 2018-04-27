@@ -58,13 +58,13 @@ include 'nav.php';
 		if($_FILES['file']['name']==""){
 			$fileNameNew = NULL;	
 		}
-	$allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'WebM', 'mp4');
+	$allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'WebM', 'mp4', 'gif');
 	
 	if(in_array($fileActualExt, $allowed)){
 		if($fileError === 0){
 			if($fileSize < 10000000){
 				$fileNameNew = uniqid('', true).".".$fileActualExt;
-				if($fileType == 'image/jpg' || $fileType == 'image/jpeg' || $fileType == 'image/png' || $fileType == 'image/pdf'){
+				if($fileType == 'image/jpg' || $fileType == 'image/jpeg' || $fileType == 'image/png' || $fileType == 'image/pdf' || $fileType == 'image/gif'){
 				$fileDestination = 'uploads/images/'.$fileNameNew;
 				}else{
 				$fileDestination = 'uploads/videos/'.$fileNameNew;
