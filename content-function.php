@@ -179,6 +179,54 @@
         }
 
     }
+    function disp_profile($username){
+        include 'connect.php';
+        $select = "SELECT * FROM users WHERE username = '$username'";
+        $query = mysqli_query($connect, $select);
+        $rows = mysqli_num_rows($query);
+        while ($row = mysqli_fetch_assoc($query)) {
+            $db_username = $row['username'];
+            $db_password = $row['password'];
+            $db_email = $row['email'];
+            $db_date = $row['date'];
+            $db_id = $row['id'];
+        }
+        $layout = '
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <p>Your Profile</p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Your Username: </h5>
+                                <p>'.$db_username.'</p>
+                            </div>
 
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Your email: </h5>
+                                <p>'.$db_email.'</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Date Registered</h5>
+                                <p>'.$db_date.'</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div><br>';
+        echo $layout;
+    }
 
 ?>

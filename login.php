@@ -90,7 +90,7 @@ if (isset($_POST['submit'])) {
                 echo 'Incorrect password';
             }
         } else {
-            die('user not found');
+            die('<script>alert("User not found");</script>');
         }
     } else {
         echo 'Please fill in fields';
