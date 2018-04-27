@@ -149,7 +149,10 @@
 											<label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
 											<input name="file" type="file" class="inputFile" id="file-input"></input>
 											</div></li>
-										</ul>
+                                        </ul>
+                                        <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+                                
+                                        </div>    
                             <input class="btn btn-primary" name="submit" type="submit" value="Reply">
                         </div>
                     </div>

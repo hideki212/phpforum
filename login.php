@@ -47,6 +47,9 @@
                                 
                                             </div>    
                                             <input class="btn btn-primary btn-xl" type="submit" class="btn btn-default" value="Login" name="submit">
+                                            <br>
+                                            <br>
+                                            <a href="forgotpassword.php" >Forgot password</a>
                                         </form>';
                                         }
                                     ?>
