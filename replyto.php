@@ -7,9 +7,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>:Welcome to the home page</title>
 </head>
 <body>
+<style>
+.image-upload > input
+{
+    display: none;
+}
+
+.image-upload a i
+{
+    cursor: pointer;
+}
+ul li {
+	list-style-type:none;
+}
+</style>
 <?php
 include 'nav.php';
 ?>

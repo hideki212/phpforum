@@ -18,7 +18,6 @@ include 'nav.php';
         <div class="container-fluid text-center">
             <div class="row content">
                 <div class="col-sm-10 text-left">
-
                     <?php
         include 'content-function.php';
         if (isset($_SESSION['username'])) {

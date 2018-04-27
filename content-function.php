@@ -97,13 +97,32 @@
         $query = mysqli_query($connect, $select);
         if($query){
             $row = mysqli_fetch_assoc($query);
+			$name = $row["name"];
+			$type = $row["type"];
+
             echo "<div class='panel panel-default'>
             <div class='panel-heading'><h2 class='title'>".$row['Title']. 
             "</h2><p> Poster : ". $row['Author']."</p><p>Date : ". $row['Date_Posted'] ."</p></div>";
-            echo "<div class='panel-body'><p>". $row['Content'] ."</p></div></div>";
+            echo "<div class='panel-body'><p>". $row['Content'] ."</p></div>";
+			
+			if($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4'){
+			echo "<video width='320' height='240' controls>
+				<source src='uploads/videos/$name' type='$type'>
+				Your browser does not support the video tag.
+				</video></div> ";
+			}else{
+				
+			}
+				
+			if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf'){
+			echo "<img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
+			}else{
+				
+			}
         }else{
             echo 'failed';
         }
+		echo "</div>";
     } 
     function addview($cid, $scid, $tid){
         include 'connect.php';
@@ -119,12 +138,18 @@
     function replytopost($cid, $scid,$tid){
         echo '<div class="row">
         <div class="col-12 col-sm-12">
-            <form action="addreply?cid=' .$cid.'&scid='.$scid. '&tid='.$tid.'" method="post">
+            <form action="addreply?cid=' .$cid.'&scid='.$scid. '&tid='.$tid.'" method="post" enctype="multipart/form-data">
                     <h2>Post Your Reply</h2>
                     <div class="row">
                         <div class="col-sm-12">
                             <textarea name="comment" id="comment" cols="40" rows="5"></textarea>
                             <br>
+										<ul>
+											<li><div class="image-upload">
+											<label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
+											<input name="file" type="file" class="inputFile" id="file-input"></input>
+											</div></li>
+										</ul>
                             <input class="btn btn-primary" name="submit" type="submit" value="Reply">
                         </div>
                     </div>
@@ -139,18 +164,37 @@
     }
     function dispreplies($cid, $scid, $tid){
         include 'connect.php';
-        $select = "SELECT replies.Author, Reply, replies.Date_Posted 
+        $select = "SELECT replies.Author, Reply, replies.Date_Posted, replies.name, replies.type
         FROM categories, subcategories, topics, replies WHERE (replies.CategoryId = $cid) 
         AND (replies.SubcategoryId = $scid) AND (replies.TopicId = $tid) AND (topics.TopicId = $tid )
         AND (categories.CategoryId = '$cid') AND (subcategories.SubcategoryId = $scid) ORDER BY ReplyId DESC";
         $query = mysqli_query($connect, $select);
         if(mysqli_num_rows($query) != 0){
             while($row = mysqli_fetch_assoc($query)){
-                echo "<div class='panel panel-default'>
-                <div class='panel-heading'><h2 class='title'>". 
-                "</h2><p> Poster : ". $row['Author']."</p><p>Date : ". $row['Date_Posted'] ."</p></div>";
-                echo "<div class='panel-body'><p>". $row['Reply'] ."</p></div></div>";
+				$name = $row["name"];
+				$type = $row["type"];
+					echo "<div class='panel panel-default'>
+					<div class='panel-heading'><h2 class='title'>". 
+					"</h2><p> Poster : ". $row['Author']."</p><p>Date : ". $row['Date_Posted'] ."</p></div>";
+					echo "<div class='panel-body'><p>". $row['Reply'] ."</p></div>";
+					
+				if($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4'){
+				echo "<video width='320' height='240' controls>
+					<source src='uploads/videos/$name' type='$type'>
+					Your browser does not support the video tag.
+					</video></div> ";
+				}else{
+					
+				}
+					
+				if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf'){
+				echo "<img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
+				}else{
+					
+				}
+			echo "</div>";
             }
+
         }
     }
     function count_replies($cid, $scid, $tid){
@@ -160,11 +204,11 @@
         return mysqli_num_rows($query);
     }
 
-    function addtopic($cid, $scid, $title, $content){
+    function addtopic($cid, $scid, $title, $content, $fileNameNew, $fileType){
         include 'connect.php';
         $user = $_SESSION['username'];
         $date = date('Y-m-d H:i:s');
-        $insert = "INSERT INTO topics(CategoryId, SubcategoryId, Author, Title, Content, Date_Posted, User_Views, replies) VALUES ('$cid','$scid', '$user','$title','$content','$date', 0, 0)";
+        $insert = "INSERT INTO topics(CategoryId, SubcategoryId, Author, Title, Content, Date_Posted, User_Views, replies, name, type) VALUES ('$cid','$scid', '$user','$title','$content','$date', 0, 0, '$fileNameNew', '$fileType')";
         //$tid = mysqli_insert_id($connect);
         //$query = mysqli_query($connect, $insert);
         if($connect->query($insert) === true){
