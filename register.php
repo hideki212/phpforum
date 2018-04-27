@@ -12,7 +12,7 @@
 <body>
 <?php
 include 'nav.php';
-include 'recaptcha-php-1.9/recaptchalib.php';
+include 'content-function.php';
 ?>
 <div class='content'>
 <div class='row'>
@@ -41,11 +41,11 @@ include 'recaptcha-php-1.9/recaptchalib.php';
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email:</label><br><input class="form-control" type="email" name="email" id="email">
+                                </div>
+                                <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+                                
                                 </div>';    
-                                    require_once("recaptcha-php-1.9/recaptchalib.php");
-                                    $publickey = "6LdrklUUAAAAAKWteF5jsQ-i_4pBRxne1BU3pGn2"; // you got this from the signup page
-                                    echo recaptcha_get_html($publickey);
-                                    
+
                                echo '<br><input class="btn btn-primary btn-xl" type="submit" value="Register" name="submit"> or <a href="register.php">Login</a>
                             </form>';
                             }
@@ -81,19 +81,10 @@ if (isset($_GET['error'])) {
     }
 }
 if (isset($_POST['submit'])) {
-    require_once('recaptchalib.php');
-    $privatekey = "6LdrklUUAAAAABosuDe0wYVyNuUO8tvcQZxpxmSe";
-    $resp = recaptcha_check_answer ($privatekey,
-                                  $_SERVER["REMOTE_ADDR"],
-                                  $_POST["recaptcha_challenge_field"],
-                                  $_POST["recaptcha_response_field"]);
-  
-    if (!$resp->is_valid) {
-      // What happens when the CAPTCHA was entered incorrectly
-      die ("The reCAPTCHA wasn't entered correctly. Go back and try it again." .
-           "(reCAPTCHA said: " . $resp->error . ")");
-    } else {
-      // Your code here to handle a successful verification
+    // Your code here to handle a successful verification
+    $captcha=$_POST['g-recaptcha-response'];
+    $success = recapture($captcha);
+    if($success){
         $username = $_POST['username'];
         $password = $_POST['password'];
         $passwordconfirm = $_POST['passwordconfirm'];
@@ -120,13 +111,15 @@ if (isset($_POST['submit'])) {
                 } else {
                     echo '<script>alert("password must be between 5 and 50 characters");</script>';
                 }
-
+    
             } else {
                 echo '<script>alert("username must be between 5 and 50 characters");</script>';
             }
-        }
+        }     
+    }else{
+        echo "<script>alert('recaptcha failed try again')</script>";
     }
-    
-    $connect->close();
+  	
+$connect->close();
 }
 ?>

@@ -272,5 +272,17 @@
         </div><br>';
         echo $layout;
     }
-
+    function recapture($capture){
+        include 'recaptcha-php-1.9/recaptchalib.php';
+        $captcha=$_POST['g-recaptcha-response'];
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $secretkey = "6LdakFUUAAAAAK4EAAFlOIpmFLEJT1ps1tsrOM3l";					
+        $response   =  file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretkey."&response=".$captcha."&remoteip=".$ip);
+        $responseKeys = json_decode($response,true);	     
+        if(intval($responseKeys["success"]) !== 1) {
+            return false;
+        } else {
+            return true;
+        }	
+    }
 ?>

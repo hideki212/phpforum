@@ -43,6 +43,9 @@
                                                 <label for="password">Password :</label>
                                                 <input class="form-control" type="password" name="password" id="password">
                                             </div>
+                                            <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+                                
+                                            </div>    
                                             <input class="btn btn-primary btn-xl" type="submit" class="btn btn-default" value="Login" name="submit">
                                         </form>';
                                         }
@@ -60,38 +63,45 @@
         </div>
     </div>
 
-<?php include 'ads.php'?>
+<?php //include 'ads.php'?>
 
 
 </body>
 </html>
 <?php
 include 'connect.php';
+include 'content-function.php';
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    if ($username && $password) {
-        $check = mysqli_query($connect, "SELECT * FROM users WHERE username = '$username'");
-        $rows = mysqli_num_rows($check);
-        if ($rows != 0) {
-            while ($row = mysqli_fetch_assoc($check)) {
-                $db_username = $row['username'];
-                $db_password = $row['password'];
-                $db_id = $row['id'];
-            }
-            if ($username == $db_username && sha1($password) == $db_password) {
-                echo 'logged in';
-                $_SESSION['username'] = $username;
-                $_SESSION['id'] = $db_id;
-                header('Location: index.php');
+    $captcha=$_POST['g-recaptcha-response'];
+    $success = recapture($captcha);
+    if($success){
+        if ($username && $password) {
+            $check = mysqli_query($connect, "SELECT * FROM users WHERE username = '$username'");
+            $rows = mysqli_num_rows($check);
+            if ($rows != 0) {
+                while ($row = mysqli_fetch_assoc($check)) {
+                    $db_username = $row['username'];
+                    $db_password = $row['password'];
+                    $db_id = $row['id'];
+                }
+                if ($username == $db_username && sha1($password) == $db_password) {
+                    echo 'logged in';
+                    $_SESSION['username'] = $username;
+                    $_SESSION['id'] = $db_id;
+                    header('Location: index.php');
+                } else {
+                    echo 'Incorrect password';
+                }
             } else {
-                echo 'Incorrect password';
+                die('<script>alert("User not found");</script>');
             }
         } else {
-            die('<script>alert("User not found");</script>');
+            echo 'Please fill in fields';
         }
-    } else {
-        echo 'Please fill in fields';
+    }else{
+        echo "<script>alert('recaptcha failed try again')</script>";
     }
 }
 ?>
