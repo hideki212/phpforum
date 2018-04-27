@@ -122,6 +122,7 @@
         }else{
             echo 'failed';
         }
+		echo "</div>";
     } 
     function addview($cid, $scid, $tid){
         include 'connect.php';
@@ -170,29 +171,30 @@
         $query = mysqli_query($connect, $select);
         if(mysqli_num_rows($query) != 0){
             while($row = mysqli_fetch_assoc($query)){
-			$name = $row["name"];
-			$type = $row["type"];
-                echo "<div class='panel panel-default'>
-                <div class='panel-heading'><h2 class='title'>". 
-                "</h2><p> Poster : ". $row['Author']."</p><p>Date : ". $row['Date_Posted'] ."</p></div>";
-                echo "<div class='panel-body'><p>". $row['Reply'] ."</p></div>";
-				
-			if($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4'){
-			echo "<video width='320' height='240' controls>
-				<source src='uploads/videos/$name' type='$type'>
-				Your browser does not support the video tag.
-				</video></div> ";
-			}else{
-				
-			}
-				
-			if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf'){
-			echo "<img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
-			}else{
-				
-			}
-
+				$name = $row["name"];
+				$type = $row["type"];
+					echo "<div class='panel panel-default'>
+					<div class='panel-heading'><h2 class='title'>". 
+					"</h2><p> Poster : ". $row['Author']."</p><p>Date : ". $row['Date_Posted'] ."</p></div>";
+					echo "<div class='panel-body'><p>". $row['Reply'] ."</p></div>";
+					
+				if($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4'){
+				echo "<video width='320' height='240' controls>
+					<source src='uploads/videos/$name' type='$type'>
+					Your browser does not support the video tag.
+					</video></div> ";
+				}else{
+					
+				}
+					
+				if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf'){
+				echo "<img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
+				}else{
+					
+				}
+			echo "</div>";
             }
+
         }
     }
     function count_replies($cid, $scid, $tid){
