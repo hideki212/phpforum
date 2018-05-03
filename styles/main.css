@@ -1,6 +1,7 @@
 html {
     font-family: "Lucida Sans", sans-serif;
-    width: 100% !important; 
+    width: 100% !important;
+    font-size: 100%;
 }
 
 .header {
@@ -8,90 +9,144 @@ html {
     color: #ffffff;
     padding: 15px;
 }
+
 .menu ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
+
 .menu li {
     padding: 8px;
     margin-bottom: 7px;
-    background-color :#33b5e5;
+    background-color: #33b5e5;
     color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
+
 .menu li:hover {
     background-color: #0099cc;
 }
-.board-style{
+
+.board-style {
     /* border: 1px groove black; 
     border-radius: 5px; */
     padding: 3px;
-    margin-top:5px;
+    margin-top: 5px;
 }
-.board-topics{
-    border-radius: 5px;
 
+.board-topics {
+    border-radius: 5px;
 }
-.board-topics:hover{
+
+.board-topics:hover {
     background: gray;
 }
-.model{
+
+.model {
     margin: 10px;
     padding: 10px;
 }
-.custom-content{
+
+.custom-content {
     margin: 10px;
 }
+
 * {
     box-sizing: border-box;
 }
+
 .row::after {
     content: "";
     clear: both;
     display: table;
 }
-.col-1 {width: 8.33%;}
-.col-2 {width: 16.66%;}
-.col-3 {width: 25%;}
-.col-4 {width: 33.33%;}
-.col-5 {width: 41.66%;}
-.col-6 {width: 50%;}
-.col-7 {width: 58.33%;}
-.col-8 {width: 66.66%;}
-.col-9 {width: 75%;}
-.col-10 {width: 83.33%;}
-.col-11 {width: 91.66%;}
-.col-12 {width: 100%;}
+
+.col-1 {
+    width: 8.33%;
+}
+
+.col-2 {
+    width: 16.66%;
+}
+
+.col-3 {
+    width: 25%;
+}
+
+.col-4 {
+    width: 33.33%;
+}
+
+.col-5 {
+    width: 41.66%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-7 {
+    width: 58.33%;
+}
+
+.col-8 {
+    width: 66.66%;
+}
+
+.col-9 {
+    width: 75%;
+}
+
+.col-10 {
+    width: 83.33%;
+}
+
+.col-11 {
+    width: 91.66%;
+}
+
+.col-12 {
+    width: 100%;
+}
+
 [class*="col-"] {
     float: left;
     /* padding: 15px; */
     /* border: 1px solid red; */
 }
-.fix{
-    padding:5px;
+
+.fix {
+    padding: 5px;
 }
-.sidenav{
+
+.sidenav {
     /* width: 100%; */
 }
-.adplace{
+
+.adplace {
     width: 100%;
 }
-.fix-panel{
+
+.fix-panel {
     width: 100%;
     /* margin-left: 30px; */
 }
-.content{
+
+.content {
     margin: 10px;
-    padding:15px;
+    padding: 15px;
 }
+
 /* Add a black background color to the top navigation */
+
 .topnav {
     background-color: #333;
     overflow: hidden;
 }
 
 /* Style the links inside the navigation bar */
+
 .topnav a {
     float: left;
     display: block;
@@ -103,64 +158,163 @@ html {
 }
 
 /* Change the color of links on hover */
+
 .topnav a:hover {
     background-color: #ddd;
     color: black;
 }
 
 /* Add an active class to highlight the current page */
+
 .active {
     background-color: #4CAF50;
     color: white;
 }
 
 /* Hide the link that should open and close the topnav on small screens */
+
 .topnav .icon {
     display: none;
 }
+
 @media screen and (max-width: 600px) {
-    .topnav a:not(:first-child) {display: none;}
-    .topnav a.icon {
-      float: right;
-      display: block;
+    .topnav a:not(:first-child) {
+        display: none;
     }
-  }
-  
-  /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
-  @media screen and (max-width: 600px) {
-    .topnav.responsive {position: relative;}
+    .topnav a.icon {
+        float: right;
+        display: block;
+    }
+}
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+
+@media screen and (max-width: 600px) {
+    .topnav.responsive {
+        position: relative;
+    }
     .topnav.responsive a.icon {
-      position: absolute;
-      right: 0;
-      top: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
     .topnav.responsive a {
-      float: none;
-      display: block;
-      text-align: left;
+        float: none;
+        display: block;
+        text-align: left;
     }
-  }
-.span12{
+}
+
+.span12 {
     border: none;
-	background: white;
-	color: #f2f2f2;
-	padding: 10px;
-	font-size: 15px;
+    background: white;
+    color: #f2f2f2;
+    padding: 10px;
+    font-size: 15px;
     border-radius: 5px;
-	position: relative;
-	box-sizing: border-box;
+    position: relative;
+    box-sizing: border-box;
     transition: all 500ms ease;
-    margin:10px;
+    margin: 10px;
     border: 1px solid #111;
     -moz-box-shadow: 35px 35px 7px #999999;
     -moz-border-bottom-right-radius: 15px;
-    -moz-border-radius:25px;
+    -moz-border-radius: 25px;
     padding: 15px 25px;
     height: inherit;
 }
-.span12:hover{
-    background: rgba(0,0,0,0);
-    border: 1px solid  #3a7999;
-	color: #3a7999;
-	box-shadow: inset 0 0 0 3px #3a7999;
+
+.span12:hover {
+    background: rgba(0, 0, 0, 0);
+    border: 1px solid #3a7999;
+    color: #3a7999;
+    box-shadow: inset 0 0 0 3px #3a7999;
+}
+
+.media {
+    padding: 10px;
+    margin: 10px;
+}
+
+.panel-body {
+    font-size: 15px;
+    font-style: inherit;
+    margin: 10px;
+}
+
+/* Tablet Landscape */
+
+@media screen and (max-width: 1060px) {
+    #primary {
+        width: 67%;
+    }
+    #secondary {
+        width: 30%;
+        margin-left: 3%;
+    }
+}
+
+/* Tabled Portrait */
+
+@media screen and (max-width: 768px) {
+    #primary {
+        width: 100%;
+    }
+    #secondary {
+        width: 100%;
+        margin: 0;
+        border: none;
+    }
+}
+
+img {
+    max-width: 100%;
+}
+
+@media (min-device-width:600px) {
+    img[data-src-600px] {
+        content: attr(data-src-600px, url);
+    }
+}
+
+@media (min-device-width:800px) {
+    img[data-src-800px] {
+        content: attr(data-src-800px, url);
+    }
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@media (min-width: 640px) {
+    body {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width:960px) {
+    body {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width:1100px) {
+    body {
+        font-size: 1.5rem;
+    }
 }

@@ -45,7 +45,6 @@
                 echo '</a></div></div></div>';
             }
             echo '</div>';
-
        
     }
     function getnumtopics($cat_id, $subcat_id){
@@ -56,14 +55,12 @@
         $rowcount = mysqli_num_rows($result);
         return $rowcount;
     }
-
     function disptopics($cid, $scid){
         include 'connect.php';
         $select = "SELECT TopicId, Author, Title, Content, Date_Posted, User_Views, replies FROM categories, subcategories, topics
                     WHERE (topics.CategoryId = '$cid') AND (topics.SubcategoryId ='$scid') AND 
                     (categories.CategoryId = '$cid') AND (subcategories.SubcategoryId = '$scid') ORDER BY TopicId DESC";
         $query = mysqli_query($connect, $select);
-
         if(mysqli_num_rows($query)){
             // /echo "<div>";
             echo "<div class='col-4 col-sm-4'>Title</div>
@@ -88,25 +85,22 @@
         //     add the very first topic like a boss!</a></p>";
         // }
     }
-
     function disptopic($cid, $scid, $tid){
         include 'connect.php';
         $select = "SELECT * FROM categories, subcategories, topics
         WHERE topics.TopicId = '$tid' AND categories.CategoryId = '$cid' AND subcategories.SubcategoryId = '$scid'";
-
         $query = mysqli_query($connect, $select);
         if($query){
             $row = mysqli_fetch_assoc($query);
 			$name = $row["name"];
 			$type = $row["type"];
-
             echo "<div class='panel panel-default'>
             <div class='panel-heading'><h2 class='title'>".$row['Title']. 
             "</h2><p> Poster : ". $row['Author']."</p><p>Date : ". $row['Date_Posted'] ."</p></div>";
             echo "<div class='panel-body'><p>". $row['Content'] ."</p></div>";
 			
 			if($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4'){
-			echo "<div><video width='320' height='240' controls>
+			echo "<div class='video-container'><video controls>
 				<source src='uploads/videos/$name' type='$type'>
 				Your browser does not support the video tag.
 				</video></div> ";
@@ -115,7 +109,7 @@
 			}
 				
 			if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf' || $type == 'image/gif'){
-			echo "<div><img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
+			echo "<div class='media'><img src='uploads/images/$name' /></div>";
 			}else{
 				
 			}
@@ -138,7 +132,7 @@
     function replytopost($cid, $scid,$tid){
         echo '<div class="row">
         <div class="col-12 col-sm-12">
-            <form action="addreply?cid=' .$cid.'&scid='.$scid. '&tid='.$tid.'" method="post" enctype="multipart/form-data">
+            <form action="addreply.php?cid=' .$cid.'&scid='.$scid. '&tid='.$tid.'" method="post" enctype="multipart/form-data">
                     <h2>Post Your Reply</h2>
                     <div class="row">
                         <div class="col-sm-12">
@@ -182,7 +176,7 @@
 					echo "<div class='panel-body'><p>". $row['Reply'] ."</p></div>";
 					
 				if($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4'){
-				echo "<div><video width='320' height='240' controls>
+				echo "<div class='media'><video width='320' height='240' controls>
 					<source src='uploads/videos/$name' type='$type'>
 					Your browser does not support the video tag.
 					</video></div> ";
@@ -191,13 +185,12 @@
 				}
 					
 				if($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf' || $type == 'image/gif'){
-				echo "<div><img src='uploads/images/$name' style='width:auto; height:200px;'/></div>";
+				echo "<div class='media'><img src='uploads/images/$name' style='width:auto; height:auto;'/></div>";
 				}else{
 					
 				}
 			echo "</div>";
             }
-
         }
     }
     function count_replies($cid, $scid, $tid){
@@ -206,7 +199,6 @@
         $query = mysqli_query($connect, $select);
         return mysqli_num_rows($query);
     }
-
     function addtopic($cid, $scid, $title, $content, $fileNameNew, $fileType){
         include 'connect.php';
         $user = $_SESSION['username'];
@@ -224,9 +216,8 @@
         }else{
             echo "failed : ". $connect->error;
         }
-
     }
-    function disp_profile($username){
+     function disp_profile($username){
         include 'connect.php';
         $select = "SELECT * FROM users WHERE username = '$username'";
         $query = mysqli_query($connect, $select);
@@ -251,21 +242,18 @@
                                 <h5>Your Username: </h5>
                                 <p>'.$db_username.'</p>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>Your email: </h5>
                                 <p>'.$db_email.'</p>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>Date Registered</h5>
                                 <p>'.$db_date.'</p>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -288,4 +276,6 @@
             return true;
         }	
     }
+
+
 ?>
