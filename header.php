@@ -12,3 +12,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/styles/main.css">
 <meta name="exoclick-site-verification" content="2891f28d79f0d85f18fbf7dfc6ed15b1">
+<script>
+
+
+</script>
+<?php 
+ob_start();
+
+?>
