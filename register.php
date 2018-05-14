@@ -26,10 +26,10 @@ include 'content-function.php';
                     </div>
                     <div class="col-sm-4">
                         <?php 
-                            if(isset($_SESSION['username'])){
-                                echo 'already logged in';
-                            }else{
-                                echo '<form action="register.php" method="post">
+                        if (isset($_SESSION['username'])) {
+                            echo 'already logged in';
+                        } else {
+                            echo '<form action="register.php" method="post">
                                 <div class="form-group">
                                 <label for="username">Username :</label><br><input class="form-control" type="text" name="username" id="username">
                                 </div>
@@ -44,11 +44,11 @@ include 'content-function.php';
                                 </div>
                                 <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
                                 
-                                </div>';    
+                                </div>';
 
-                               echo '<br><input class="btn btn-primary btn-xl" type="submit" value="Register" name="submit"> or <a href="register.php">Login</a>
+                            echo '<br><input class="btn btn-primary btn-xl" type="submit" value="Register" name="submit"> or <a href="register.php">Login</a>
                             </form>';
-                            }
+                        }
                         ?>
                     </div>
                     <div class="col-sm-4">
@@ -62,7 +62,7 @@ include 'content-function.php';
     </div>
     <?php 
     //include 'ads.php'
-    
+
     ?>
   </div>
 </div>
@@ -82,9 +82,9 @@ if (isset($_GET['error'])) {
 }
 if (isset($_POST['submit'])) {
     // Your code here to handle a successful verification
-    $captcha=$_POST['g-recaptcha-response'];
+    $captcha = $_POST['g-recaptcha-response'];
     $success = recapture($captcha);
-    if($success){
+    if ($success) {
         $username = $_POST['username'];
         $password = $_POST['password'];
         $passwordconfirm = $_POST['passwordconfirm'];
@@ -111,15 +111,15 @@ if (isset($_POST['submit'])) {
                 } else {
                     echo '<script>alert("password must be between 5 and 50 characters");</script>';
                 }
-    
+
             } else {
                 echo '<script>alert("username must be between 5 and 50 characters");</script>';
             }
-        }     
-    }else{
+        }
+    } else {
         echo "<script>alert('recaptcha failed try again')</script>";
     }
-  	
-$connect->close();
+
+    $connect->close();
 }
 ?>

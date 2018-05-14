@@ -31,9 +31,9 @@
                             </div>
                                 <div class="col-sm-4">
                                         <?php
-                                        if(isset($_SESSION['username'])){
+                                        if (isset($_SESSION['username'])) {
                                             echo "already logged in";
-                                        }else{
+                                        } else {
                                             echo '<form action="login.php" method="post">
                                             <div class="form-group">
                                                 <label for="username">Username :</label>
@@ -52,7 +52,7 @@
                                             <a href="forgotpassword.php" >Forgot password</a>
                                         </form>';
                                         }
-                                    ?>
+                                        ?>
 
                                 </div>
                                 <div class="col-sm-4">
@@ -74,9 +74,9 @@ include 'content-function.php';
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $captcha=$_POST['g-recaptcha-response'];
+    $captcha = $_POST['g-recaptcha-response'];
     $success = recapture($captcha);
-    if($success){
+    if ($success) {
         if ($username && $password) {
             $check = mysqli_query($connect, "SELECT * FROM users WHERE username = '$username'");
             $rows = mysqli_num_rows($check);
@@ -99,7 +99,7 @@ if (isset($_POST['submit'])) {
         } else {
             echo 'Please fill in fields';
         }
-    }else{
+    } else {
         echo "<script>alert('recaptcha failed try again')</script>";
     }
 }

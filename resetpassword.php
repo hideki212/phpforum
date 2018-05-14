@@ -2,13 +2,13 @@
 include 'connect.php';
 include 'content-function.php';
 if (isset($_POST['submit'])) {
-    $captcha=$_POST['g-recaptcha-response'];
+    $captcha = $_POST['g-recaptcha-response'];
     $success = recapture($captcha);
-    if($success){
+    if ($success) {
         $token = $_GET['token'];
         $check = mysqli_query($connect, "SELECT * FROM users WHERE password = '$token'");
         $rows = mysqli_num_rows($check);
-        if($rows !=0){
+        if ($rows != 0) {
             while ($row = mysqli_fetch_assoc($check)) {
                 $db_username = $row['username'];
                 $db_password = $row['password'];
@@ -18,16 +18,16 @@ if (isset($_POST['submit'])) {
             $password = $_POST['password'];
             $password2 = $_POST['password2'];
             $encrypted = sha1($password);
-            if($password2 == $password){
+            if ($password2 == $password) {
                 $update = "UPDATE users SET password = '$encrypted'  WHERE id = $db_id";
-                if ($connect->query($update) === TRUE) {
+                if ($connect->query($update) === true) {
                     echo "Reset Successful <a href='login.php'>click here to login</a>";
                 } else {
                     echo "Error updating record: " . $connect->error;
                 }
             }
         }
-    }else{
+    } else {
         echo "<script>alert('recaptcha failed try again')</script>";
     }
 }
@@ -64,7 +64,7 @@ include 'nav.php';
                             echo 'already logged in';
                         } else if (isset($_GET['token'])) {
                             $token = $_GET['token'];
-                            echo '<form action="resetpassword.php?token='.$token.'" method="post">
+                            echo '<form action="resetpassword.php?token=' . $token . '" method="post">
 									<div class="form-group">
 									<label for="password">New Password :</label><br><input class="form-control" type="text" name="password" id="password">
                                     </div>
