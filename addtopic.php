@@ -35,64 +35,64 @@ include 'nav.php';
         <div class="row">
             <div class="col-sm-12">
             <?php
-include 'content-function.php';
-if (isset($_SESSION['username'])) {
-    if(isset($_POST['submit'])){
-        $captcha=$_POST['g-recaptcha-response'];
-        $success = recapture($captcha);
-        if($success){
-                               $scid = $_GET['scid'];
-                    $cid = $_GET['cid'];
-                    $title = $_POST['title'];
-                    $content = $_POST['comment'];
+            include 'content-function.php';
+            if (isset($_SESSION['username'])) {
+                if (isset($_POST['submit'])) {
+                    $captcha = $_POST['g-recaptcha-response'];
+                    $success = recapture($captcha);
+                    if ($success) {
+                        $scid = $_GET['scid'];
+                        $cid = $_GET['cid'];
+                        $title = $_POST['title'];
+                        $content = $_POST['comment'];
 					
 	//upload file 
-	$file = $_FILES['file'];
-	
-	$fileName = $_FILES['file']['name'];
-	$fileTmpName = $_FILES['file']['tmp_name'];
-	$fileSize = $_FILES['file']['size'];
-	$fileError = $_FILES['file']['error'];
-	$fileType = $_FILES['file']['type'];
-	
-	$fileExt = explode('.', $fileName);
-	$fileActualExt = strtolower(end($fileExt));
-	
-		if($_FILES['file']['name']==""){
-			$fileNameNew = NULL;	
-		}
-	$allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'WebM', 'mp4', 'gif');
-	
-	if(in_array($fileActualExt, $allowed)){
-		if($fileError === 0){
-			if($fileSize < 10000000){
-				$fileNameNew = uniqid('', true).".".$fileActualExt;
-				if($fileType == 'image/jpg' || $fileType == 'image/jpeg' || $fileType == 'image/png' || $fileType == 'image/pdf' || $fileType == 'image/gif'){
-				$fileDestination = 'uploads/images/'.$fileNameNew;
-				}else{
-				$fileDestination = 'uploads/videos/'.$fileNameNew;
-				}
-				move_uploaded_file($fileTmpName, $fileDestination);
-			}else{
-				echo "Your file is too big!";
-			}
-		}else{
-			echo "There was an error uploading your file!";
-		}
-	}else{
-		echo "You cannot upload files of this type!";
-	}
+                        $file = $_FILES['file'];
+
+                        $fileName = $_FILES['file']['name'];
+                        $fileTmpName = $_FILES['file']['tmp_name'];
+                        $fileSize = $_FILES['file']['size'];
+                        $fileError = $_FILES['file']['error'];
+                        $fileType = $_FILES['file']['type'];
+
+                        $fileExt = explode('.', $fileName);
+                        $fileActualExt = strtolower(end($fileExt));
+
+                        if ($_FILES['file']['name'] == "") {
+                            $fileNameNew = null;
+                        }
+                        $allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'WebM', 'mp4', 'gif');
+
+                        if (in_array($fileActualExt, $allowed)) {
+                            if ($fileError === 0) {
+                                if ($fileSize < 10000000) {
+                                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                                    if ($fileType == 'image/jpg' || $fileType == 'image/jpeg' || $fileType == 'image/png' || $fileType == 'image/pdf' || $fileType == 'image/gif') {
+                                        $fileDestination = 'uploads/images/' . $fileNameNew;
+                                    } else {
+                                        $fileDestination = 'uploads/videos/' . $fileNameNew;
+                                    }
+                                    move_uploaded_file($fileTmpName, $fileDestination);
+                                } else {
+                                    echo "Your file is too big!";
+                                }
+                            } else {
+                                echo "There was an error uploading your file!";
+                            }
+                        } else {
+                            echo "You cannot upload files of this type!";
+                        }
 	//--file--
-                    addtopic($cid, $scid, $title, $content, $fileNameNew, $fileType);
-        }else{
-            echo "<script>alert('recaptcha failed try again')</script>";
-        }
-    }else{
-        $scid = $_GET['scid'];
-        $cid = $_GET['cid'];
-        echo '<div class="row">
+                        addtopic($cid, $scid, $title, $content, $fileNameNew, $fileType);
+                    } else {
+                        echo "<script>alert('recaptcha failed try again')</script>";
+                    }
+                } else {
+                    $scid = $_GET['scid'];
+                    $cid = $_GET['cid'];
+                    echo '<div class="row">
                 <div class="col-12 col-sm-12">
-                    <form action="addtopic.php?cid='.$cid.'&scid='.$scid.'" method="post" enctype="multipart/form-data">
+                    <form action="addtopic.php?cid=' . $cid . '&scid=' . $scid . '" method="post" enctype="multipart/form-data">
                             <h2>Post Your Reply</h2>
                             <div class="row">
                                 <div class="col-sm-12">
@@ -121,12 +121,12 @@ if (isset($_SESSION['username'])) {
                     </form>                           
                 </div>
             </div>';
-    }
+                }
 
-} else {
-    echo '<p>You must be logged in to post a topic</p>
+            } else {
+                echo '<p>You must be logged in to post a topic</p>
             <p><a href="login.php">Login</a> or <a href="register.php">Register</a></p>';
-}
+            }
                 //disptopic($_GET['cid'], $_GET['scid'], $_GET['tid']);
             ?>
             </div>
