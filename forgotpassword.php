@@ -25,20 +25,20 @@ include 'nav.php';
                     </div>
                     <div class="col-sm-4">
                         <?php 
-						if (isset($_SESSION['username'])) {
-							echo 'already logged in';
-						} else {
-							echo '<form action="forgotpassword.php" method="post">
-									<div class="form-group">
-									<label for="username">Username :</label><br><input class="form-control" type="text" name="username" id="username">
-									</div>
-									<div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
-                                
-									</div>    
-                                <br><input class="btn btn-primary btn-xl" type="submit" value="Recover" name="submit">
-                            </form>';
-																							}
-																							?>
+							if (isset($_SESSION['username'])) {
+								echo 'already logged in';
+							} else {
+								echo '<form action="forgotpassword.php" method="post">
+								<div class="form-group">
+										<label for="username">Username :</label><br><input class="form-control" type="text" name="username" id="username">
+										</div>
+										<div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+									
+										</div>    
+									<br><input class="btn btn-primary btn-xl" type="submit" value="Recover" name="submit">
+								</form>';
+							}
+						?>
                     </div>
                     <div class="col-sm-4">
                     </div>
@@ -63,9 +63,9 @@ require 'vendor/autoload.php';
 include 'connect.php';
 include 'content-function.php';
 if (isset($_POST['submit'])) {
-	$captcha=$_POST['g-recaptcha-response'];
+	$captcha = $_POST['g-recaptcha-response'];
 	$success = recapture($captcha);
-	if($success){
+	if ($success) {
 		$username = $_POST['username'];
 		if ($username) {
 			if (strlen($username) >= 5 && strlen($username) <= 50) {
@@ -111,7 +111,7 @@ if (isset($_POST['submit'])) {
 	//convert HTML into a basic plain-text alternative body
 					//$mail->msgHTML(file_get_contents('contents.html'), __DIR__);
 
-					$mail->msgHTML('<a href="https://www.winw99.com/resetpassword.php?token='.$db_password.'">click here to reset password</a>');
+					$mail->msgHTML('<a href="https://www.winw99.com/resetpassword.php?token=' . $db_password . '">click here to reset password</a>');
 	//Replace the plain text body with one created manually
 					$mail->AltBody = 'This is a plain-text message body';
 	//Attach an image file
@@ -130,10 +130,10 @@ if (isset($_POST['submit'])) {
 			}
 		}
 		$connect->close();
-	}else{
+	} else {
 		echo "<script>alert('recaptcha failed try again')</script>";
 	}
-	
+
 }
 ?>
 <?php

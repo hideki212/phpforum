@@ -13,8 +13,8 @@ if (isset($_SESSION['username'])) {
 			$scid = $_GET['scid'];
 			$tid = $_GET['tid'];
 			if (strlen($comment) < 30) {
-				
-				header('Location: ' . $_SERVER['HTTP_REFERER']. '&error=1');
+
+				header('Location: ' . $_SERVER['HTTP_REFERER'] . '&error=1');
 			} else {
 								//upload file 
 				$file = $_FILES['file'];
