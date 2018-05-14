@@ -65,12 +65,9 @@
         <div class="col-sm-2"></div>
         </div>
     </div>
-
-<?php //include 'ads.php'?>
-
-
 </body>
 </html>
+
 <?php
 include 'connect.php';
 include 'content-function.php';
@@ -90,7 +87,6 @@ if (isset($_POST['submit'])) {
                     $db_id = $row['id'];
                 }
                 if ($username == $db_username && sha1($password) == $db_password) {
-                    echo 'logged in';
                     $_SESSION['username'] = $username;
                     $_SESSION['id'] = $db_id;
                     header('Location: index.php');
