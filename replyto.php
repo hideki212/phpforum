@@ -36,10 +36,18 @@ include 'nav.php';
             <?php
             include 'content-function.php';
             if (isset($_SESSION['username'])) {
-                $scid = $_GET['scid'];
-                $cid = $_GET['cid'];
-                $tid = $_GET['tid'];
-                replytopost($cid, $scid, $tid);
+                if(isset($_GET['error'])){
+                    if($_GET['error'] == 1){
+                        header('Location: ' . $_SERVER['HTTP_REFERER']);
+                        echo "Reply needs to be more then 30 characters";
+                    }
+                }else{
+                    $scid = $_GET['scid'];
+                    $cid = $_GET['cid'];
+                    $tid = $_GET['tid'];
+                    replytopost($cid, $scid, $tid);
+                }
+
             } else {
                 echo '<p>You must be logged in to post a reply</p>
                         <p><a href="login.php">Login</a> or <a href="register.php">Register</a></p>';
