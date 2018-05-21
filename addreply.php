@@ -30,8 +30,7 @@ if (isset($_SESSION['username'])) {
 
 				if ($_FILES['file']['name'] == "") {
 					$fileNameNew = null;
-				}
-				if ($fileNameNew != null) {
+				}else{
 					$allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'WebM', 'mp4', 'gif');
 					if (in_array($fileActualExt, $allowed)) {
 						if ($fileError === 0) {

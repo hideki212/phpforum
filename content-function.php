@@ -105,7 +105,7 @@ function disptopic($cid, $scid, $tid)
         echo "<div class='panel-body'><p>" . $row['Content'] . "</p></div>";
 
         if ($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4') {
-            echo "<div class='video-container'><video controls>
+            echo "<div class='media'><video controls>
 				<source src='uploads/videos/$name' type='$type'>
 				Your browser does not support the video tag.
 				</video></div> ";
@@ -146,15 +146,15 @@ function replytopost($cid, $scid, $tid)
                         <div class="col-sm-12">
                             <textarea name="comment" id="comment" cols="40" rows="5" minlength="30"></textarea>
                             <br>
-										<ul>
-											<li><div class="image-upload">
-											<label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
-											<input name="file" type="file" class="inputFile" id="file-input"></input>
-											</div></li>
-                                        </ul>
-                                        <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
-                                
-                                        </div>    
+                            <ul>
+                                <li><div class="image-upload">
+                                <label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
+                                <input name="file" type="file" class="inputFile" id="file-input"></input>
+                                </div></li>
+                            </ul>
+                            <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+                    
+                            </div>    
                             <input class="btn btn-primary" name="submit" type="submit" value="Reply">
                         </div>
                     </div>
