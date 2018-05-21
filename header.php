@@ -13,7 +13,26 @@
 <link rel="stylesheet" href="/styles/main.css">
 <meta name="exoclick-site-verification" content="2891f28d79f0d85f18fbf7dfc6ed15b1">
 <script>
-
+function confirmDelete(ReplyId){
+	var a = confirm("asdas");
+	if(a == true){
+		alert(ReplyId);
+		$.ajax({
+			url: "forum/topics.php",
+			type: "",
+			dataType: "json",
+			data: {
+				'replyId' : ReplyId
+			},
+			success: function(response){
+				alert(response);
+			},
+			error: function(jqXHR, textStatus,errorThrown){
+				console.log(textStatus, errorThrown);
+			}
+		});
+	}
+}
 
 </script>
 <?php 

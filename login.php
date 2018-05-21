@@ -82,7 +82,6 @@ if (isset($_POST['submit'])) {
             $rows = mysqli_num_rows($check);
             if ($rows != 0) {
                 while ($row = mysqli_fetch_assoc($check)) {
-                    $db_admin = $row['admin'];
                     $db_username = $row['username'];
                     $db_password = $row['password'];
                     $db_id = $row['id'];

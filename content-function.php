@@ -43,7 +43,7 @@ function dispsubcategories($parent_id)
         echo "</p></div>";
         echo '<div class="col-2 col-sm-2">';
         echo getnumtopics($parent_id, $row['SubcategoryId']);
-        echo '</div>';
+		echo '</div>';
         echo '</a></div></div></div>';
     }
     echo '</div>';
@@ -64,6 +64,15 @@ function disptopics($cid, $scid)
     $select = "SELECT TopicId, Author, Title, Content, Date_Posted, User_Views, replies FROM categories, subcategories, topics
                     WHERE (topics.CategoryId = '$cid') AND (topics.SubcategoryId ='$scid') AND 
                     (categories.CategoryId = '$cid') AND (subcategories.SubcategoryId = '$scid') ORDER BY TopicId DESC";
+					
+				//call function alert
+				function phpAlert($msg) {
+					echo '<script language="javascript">';
+					echo 'alert ("' . $msg . '")';
+					echo '</script>';
+				}
+				
+				
     $query = mysqli_query($connect, $select);
     if (mysqli_num_rows($query)) {
             // /echo "<div>";
@@ -74,14 +83,38 @@ function disptopics($cid, $scid)
             <div class='col-2 col-sm-2'>Replies</div><br><hr>";
         while ($row = mysqli_fetch_assoc($query)) {
                // echo "<div>";
+			$TopicId = $row['TopicId'];
             echo "<div class='span12'><div class='row fix'><div class='board-topics'><a href='readtopic.php?cid=" . $cid . "&scid=" . $scid . "&tid=" . $row['TopicId'] . "'>" .
                 "<div class='col-4 col-sm-4'>" . $row['Title'] . "</div>
                      <div class='col-2 col-sm-2'>" . $row['Author'] . "</div>
                      <div class='col-2 col-sm-2'>" . $row['Date_Posted'] . "</div>
                      <div class='col-2 col-sm-2'>" . $row['User_Views'] . "</div>
                      <div class='col-2 col-sm-2'>" . $row['replies'] .
-                "</div></a></div></div></div>";
+                "</div></a></div> 
+				
+				<div style='float:right;'><form method='POST' style='color:red;'><button style='border: none;' onclick='' name=$TopicId>Delete</button></form></div> 
+				
+				</div></div>";
                      //.$row['replies'].
+					 
+			$deleteReplies = "DELETE FROM `replies` WHERE TopicId = $TopicId";
+			$deleteTopic = "DELETE FROM `topics` WHERE TopicId = $TopicId";
+			
+			if (!isset($_SESSION['username']) && isset($_POST[$TopicId])){
+				phpAlert("Please Login to Continue");
+				header("Refresh:0");
+			}else{
+			if (isset($_SESSION['username'])){
+				if(isset($_POST[$TopicId])){		
+					if(mysqli_query($connect, $deleteReplies) && mysqli_query($connect, $deleteTopic)){
+						phpAlert("deleted");
+						header("Refresh:0");
+					}else{
+						phpAlert("Fail to delete post");
+						}
+				}
+			}
+			}
         }
     }
         // }else{
@@ -105,7 +138,7 @@ function disptopic($cid, $scid, $tid)
         echo "<div class='panel-body'><p>" . $row['Content'] . "</p></div>";
 
         if ($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4') {
-            echo "<div class='media'><video controls>
+            echo "<div class='video-container'><video controls>
 				<source src='uploads/videos/$name' type='$type'>
 				Your browser does not support the video tag.
 				</video></div> ";
@@ -146,15 +179,15 @@ function replytopost($cid, $scid, $tid)
                         <div class="col-sm-12">
                             <textarea name="comment" id="comment" cols="40" rows="5" minlength="30"></textarea>
                             <br>
-                            <ul>
-                                <li><div class="image-upload">
-                                <label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
-                                <input name="file" type="file" class="inputFile" id="file-input"></input>
-                                </div></li>
-                            </ul>
-                            <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
-                    
-                            </div>    
+										<ul>
+											<li><div class="image-upload">
+											<label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
+											<input name="file" type="file" class="inputFile" id="file-input"></input>
+											</div></li>
+                                        </ul>
+                                        <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
+                                
+                                        </div>    
                             <input class="btn btn-primary" name="submit" type="submit" value="Reply">
                         </div>
                     </div>
@@ -171,20 +204,66 @@ function addreply($cid, $scid, $tid)
 function dispreplies($cid, $scid, $tid)
 {
     include 'connect.php';
-    $select = "SELECT replies.Author, Reply, replies.Date_Posted, replies.name, replies.type
+    $select = "SELECT replies.Author, Reply, replies.Date_Posted, replies.name, replies.type, replies.ReplyId
         FROM categories, subcategories, topics, replies WHERE (replies.CategoryId = $cid) 
         AND (replies.SubcategoryId = $scid) AND (replies.TopicId = $tid) AND (topics.TopicId = $tid )
         AND (categories.CategoryId = '$cid') AND (subcategories.SubcategoryId = $scid) ORDER BY ReplyId DESC";
+		
+				//call function alert
+		      function phpAlert($msg) {
+				echo '<script language="javascript">';
+				echo 'alert ("' . $msg . '")';
+				echo '</script>';
+				}
+				
+				//call function alert
+		      function phpConfirm() {
+				echo '<script language="javascript">';
+				echo '    var r = confirm("Press a button!");
+						if (r == true) {
+							return true;
+						} else {
+							return false;
+						}';
+				echo '</script>';
+				}
+				
     $query = mysqli_query($connect, $select);
     if (mysqli_num_rows($query) != 0) {
         while ($row = mysqli_fetch_assoc($query)) {
+			$ReplyId = $row['ReplyId'];
             $name = $row["name"];
             $type = $row["type"];
             echo "<div class='panel panel-default'>
-					<div class='panel-heading'><h2 class='title'>" .
+					<div class='panel-heading'>
+					
+					<div style='float:right;'>
+					<button style='border: none;' onclick='confirmDelete($ReplyId);' ><i class='fa fa-close'></i></button></div>
+					
+					<h2 class='title'>" .
                 "</h2><p> Poster : " . $row['Author'] . "</p><p>Date : " . $row['Date_Posted'] . "</p></div>";
             echo "<div class='panel-body'><p>" . $row['Reply'] . "</p></div>";
 
+			/*
+			$delete = "DELETE FROM `replies` WHERE ReplyId = $ReplyId";
+			
+			if (!isset($_SESSION['username']) && isset($_POST[$ReplyId])){
+				phpAlert("Please Login to Continue");
+				header("Refresh:0");
+			}else{
+			if (isset($_SESSION['username'])){
+				
+				if(isset($_POST[$ReplyId])){
+					if(mysqli_query($connect, $delete)){
+						phpAlert("deleted");
+						header("Refresh:0");
+					}else{
+						phpAlert("Fail to delete post");
+						}
+				}
+			}
+			}*/
+					
             if ($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4') {
                 echo "<div class='media'><video width='320' height='240' controls>
 					<source src='uploads/videos/$name' type='$type'>
@@ -306,5 +385,23 @@ function recapture($capture)
     } else {
         return true;
     }
+}
+
+function confirmDelete($ReplyId){
+	include 'connect.php';
+			$delete = "DELETE FROM `replies` WHERE ReplyId = $ReplyId";
+			
+			if (isset($_SESSION['username'])){
+				
+				if(isset($_POST[$ReplyId])){
+					if(mysqli_query($connect, $delete)){
+						phpAlert("deleted");
+						header("Refresh:0");
+					}else{
+						phpAlert("Fail to delete post");
+						}
+				}
+			}
+			
 }
 ?>
