@@ -97,8 +97,8 @@ if (isset($_POST['submit'])) {
                         echo "<script>alert('Passwords do not match');</script>";
                     } else {
                         $shapass = sha1($password);
-                        $insert = "INSERT INTO users(username, password, email, date, replies) 
-                        VALUES('$username','$shapass','$email', '$date', 0)";
+                        $insert = "INSERT INTO users(username, password, email, date, replies, admin) 
+                        VALUES('$username','$shapass','$email', '$date', 0, 0)";
                         if ($connect->query($insert) === true) {
                             header('Location: /index.php/reg-success');
                             //echo "New record created successfully<br> ". "<a style='text-decoration:underline;' href='/index.html' >Go to Login</a>";

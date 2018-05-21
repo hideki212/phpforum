@@ -34,10 +34,6 @@ include 'nav.php';
             ?>
                 <?php
                 include 'content-function.php';
-				if(isset($_POST['replyId'])){
-					echo $_POST['replyId'];
-					confirmDelete($_POST['replyId']);
-				}
 				disptopics($_GET['cid'], $_GET['scid']);
                 ?>
                 <br>

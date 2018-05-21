@@ -15,22 +15,22 @@ USER INTERFACE:
 - add reply DONE
 - add topic DONE
 - live chat
-- user profile
+- user profile 
 - spam protection
-- lost password recovery
-- post images
-- post videos
-- post banner  
+- lost password recovery DONE
+- post images DONE
+- post videos DONE
+- post banner 
 - styling 
-- capture codes
+- capture codes DONE
 
 
 
 ADMIN INTERFACE
-- add categories
-- black user
-- remove topic 
-- remove reply
+- add categories 
+- block user
+- remove topic DONE
+- remove reply DONE
 - daily statistics 
 - monthly statistics 
 - new user joined 

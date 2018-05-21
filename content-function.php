@@ -5,13 +5,18 @@ function dispcategories()
     $select = "SELECT * FROM categories";
     $result = $connect->query($select);
     while ($row = $result->fetch_assoc()) {
+        $cat_id =$row['CategoryId'];
         echo "<div class='row'>";
         echo "<div class='col-sm-12 fix-panel'>";
         echo "<div class='panel panel-default'>";
         echo "<div class='panel-heading'><h4>";
         echo $row['Category'];
-        echo "</h4></div>";
-        dispsubcategories($row['CategoryId']);
+        if(isset($_SESSION['username']) && isset($_SESSION['admin'])){
+            echo "</h4> <div style=''><form action='addCategory.php' method='POST'><input name='parent_id' value='$cat_id' hidden><button type='submit' class='btn btn-primary' style='border: none;' onclick='' name='submit'>Add A Category</button></form></div>";
+        
+        }
+        echo "</div>";
+        dispsubcategories($cat_id);
             //echo "</div>";
         echo "</div></div></div>";
     }
@@ -28,6 +33,7 @@ function dispsubcategories($parent_id)
     $result = $connect->query($select);
 
     echo "<div class='panel-body fix-panel'>
+        
         <div class='col-10 col-sm-10 text-left' style='text-decoration: underline;'><h5>Categories</h5></div>
         <div class='col-2 col-sm-2 text-left float-right' style='text-decoration: underline;'><h5>topics</h5></div><br><hr>";
     while ($row = $result->fetch_assoc()) {
@@ -43,7 +49,7 @@ function dispsubcategories($parent_id)
         echo "</p></div>";
         echo '<div class="col-2 col-sm-2">';
         echo getnumtopics($parent_id, $row['SubcategoryId']);
-		echo '</div>';
+        echo '</div>';
         echo '</a></div></div></div>';
     }
     echo '</div>';
@@ -66,13 +72,14 @@ function disptopics($cid, $scid)
                     (categories.CategoryId = '$cid') AND (subcategories.SubcategoryId = '$scid') ORDER BY TopicId DESC";
 					
 				//call function alert
-				function phpAlert($msg) {
-					echo '<script language="javascript">';
-					echo 'alert ("' . $msg . '")';
-					echo '</script>';
-				}
-				
-				
+    function phpAlert($msg)
+    {
+        echo '<script language="javascript">';
+        echo 'alert ("' . $msg . '")';
+        echo '</script>';
+    }
+
+
     $query = mysqli_query($connect, $select);
     if (mysqli_num_rows($query)) {
             // /echo "<div>";
@@ -83,38 +90,50 @@ function disptopics($cid, $scid)
             <div class='col-2 col-sm-2'>Replies</div><br><hr>";
         while ($row = mysqli_fetch_assoc($query)) {
                // echo "<div>";
-			$TopicId = $row['TopicId'];
-            echo "<div class='span12'><div class='row fix'><div class='board-topics'><a href='readtopic.php?cid=" . $cid . "&scid=" . $scid . "&tid=" . $row['TopicId'] . "'>" .
-                "<div class='col-4 col-sm-4'>" . $row['Title'] . "</div>
+            $TopicId = $row['TopicId'];
+            if (isset($_SESSION['admin'])) {
+                echo "<div class='span12'><div class='row fix'><div class='board-topics'><a href='readtopic.php?cid=" . $cid . "&scid=" . $scid . "&tid=" . $row['TopicId'] . "'>" .
+                    "<div class='col-4 col-sm-4'>" . $row['Title'] . "</div>
                      <div class='col-2 col-sm-2'>" . $row['Author'] . "</div>
                      <div class='col-2 col-sm-2'>" . $row['Date_Posted'] . "</div>
                      <div class='col-2 col-sm-2'>" . $row['User_Views'] . "</div>
                      <div class='col-2 col-sm-2'>" . $row['replies'] .
-                "</div></a></div> 
+                    "</div></a></div> 
 				
-				<div style='float:right;'><form method='POST' style='color:red;'><button style='border: none;' onclick='' name=$TopicId>Delete</button></form></div> 
+				<div style='float:right;'><button class='btn btn-danger' style='border: none;' onclick='confirmDelete(null , $TopicId)'>Delete</button></div> 
 				
 				</div></div>";
+            } else {
+                echo "<div class='span12'><div class='row fix'><div class='board-topics'><a href='readtopic.php?cid=" . $cid . "&scid=" . $scid . "&tid=" . $row['TopicId'] . "'>" .
+                    "<div class='col-4 col-sm-4'>" . $row['Title'] . "</div>
+                     <div class='col-2 col-sm-2'>" . $row['Author'] . "</div>
+                     <div class='col-2 col-sm-2'>" . $row['Date_Posted'] . "</div>
+                     <div class='col-2 col-sm-2'>" . $row['User_Views'] . "</div>
+                     <div class='col-2 col-sm-2'>" . $row['replies'] .
+                    "</div></a></div>  			
+				</div></div>";
+            }
+
                      //.$row['replies'].
-					 
-			$deleteReplies = "DELETE FROM `replies` WHERE TopicId = $TopicId";
-			$deleteTopic = "DELETE FROM `topics` WHERE TopicId = $TopicId";
-			
-			if (!isset($_SESSION['username']) && isset($_POST[$TopicId])){
-				phpAlert("Please Login to Continue");
-				header("Refresh:0");
-			}else{
-			if (isset($_SESSION['username'])){
-				if(isset($_POST[$TopicId])){		
-					if(mysqli_query($connect, $deleteReplies) && mysqli_query($connect, $deleteTopic)){
-						phpAlert("deleted");
-						header("Refresh:0");
-					}else{
-						phpAlert("Fail to delete post");
-						}
-				}
-			}
-			}
+
+            $deleteReplies = "DELETE FROM `replies` WHERE TopicId = $TopicId";
+            $deleteTopic = "DELETE FROM `topics` WHERE TopicId = $TopicId";
+
+            if (!isset($_SESSION['username']) && isset($_POST[$TopicId])) {
+                phpAlert("Please Login to Continue");
+                header("Refresh:0");
+            } else {
+                if (isset($_SESSION['username'])) {
+                    if (isset($_POST[$TopicId])) {
+                        if (mysqli_query($connect, $deleteReplies) && mysqli_query($connect, $deleteTopic)) {
+                            phpAlert("deleted");
+                            header("Refresh:0");
+                        } else {
+                            phpAlert("Fail to delete post");
+                        }
+                    }
+                }
+            }
         }
     }
         // }else{
@@ -210,39 +229,50 @@ function dispreplies($cid, $scid, $tid)
         AND (categories.CategoryId = '$cid') AND (subcategories.SubcategoryId = $scid) ORDER BY ReplyId DESC";
 		
 				//call function alert
-		      function phpAlert($msg) {
-				echo '<script language="javascript">';
-				echo 'alert ("' . $msg . '")';
-				echo '</script>';
-				}
+    function phpAlert($msg)
+    {
+        echo '<script language="javascript">';
+        echo 'alert ("' . $msg . '")';
+        echo '</script>';
+    }
 				
 				//call function alert
-		      function phpConfirm() {
-				echo '<script language="javascript">';
-				echo '    var r = confirm("Press a button!");
+    function phpConfirm()
+    {
+        echo '<script language="javascript">';
+        echo '    var r = confirm("Press a button!");
 						if (r == true) {
 							return true;
 						} else {
 							return false;
 						}';
-				echo '</script>';
-				}
-				
+        echo '</script>';
+    }
+
     $query = mysqli_query($connect, $select);
     if (mysqli_num_rows($query) != 0) {
         while ($row = mysqli_fetch_assoc($query)) {
-			$ReplyId = $row['ReplyId'];
+            $ReplyId = $row['ReplyId'];
             $name = $row["name"];
             $type = $row["type"];
-            echo "<div class='panel panel-default'>
-					<div class='panel-heading'>
-					
-					<div style='float:right;'>
-					<button style='border: none;' onclick='confirmDelete($ReplyId);' ><i class='fa fa-close'></i></button></div>
-					
-					<h2 class='title'>" .
-                "</h2><p> Poster : " . $row['Author'] . "</p><p>Date : " . $row['Date_Posted'] . "</p></div>";
-            echo "<div class='panel-body'><p>" . $row['Reply'] . "</p></div>";
+            if (isset($_SESSION['admin'])) {
+                echo "<div class='panel panel-default'>
+                <div class='panel-heading'>
+                
+                <div style='float:right;'>
+                <button class='btn btn-danger'  style='border: none;' onclick='confirmDelete($ReplyId, null);' ><i class='fa fa-close'></i></button></div>
+                
+                <h2 class='title'>" .
+                    "</h2><p> Poster : " . $row['Author'] . "</p><p>Date : " . $row['Date_Posted'] . "</p></div>";
+                echo "<div class='panel-body'><p>" . $row['Reply'] . "</p></div>";
+            } else {
+                echo "<div class='panel panel-default'>
+                <div class='panel-heading'>
+                <h2 class='title'>" .
+                    "</h2><p> Poster : " . $row['Author'] . "</p><p>Date : " . $row['Date_Posted'] . "</p></div>";
+                echo "<div class='panel-body'><p>" . $row['Reply'] . "</p></div>";
+            }
+
 
 			/*
 			$delete = "DELETE FROM `replies` WHERE ReplyId = $ReplyId";
@@ -263,7 +293,7 @@ function dispreplies($cid, $scid, $tid)
 				}
 			}
 			}*/
-					
+
             if ($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4') {
                 echo "<div class='media'><video width='320' height='240' controls>
 					<source src='uploads/videos/$name' type='$type'>
@@ -328,7 +358,48 @@ function disp_profile($username)
         $db_date = $row['date'];
         $db_id = $row['id'];
     }
-    $layout = '
+    if(isset($_SESSION['admin'])){
+        $layout = '
+        <div class="row">
+            <div class="col-sm-10">
+            <ul class="menuItems">
+                <li> <a href="checkstats.php" class="button">Check Stats</a></li>
+                <li> <a href="blockUser.php" class="button">Block User</a></li>
+                <li> <a href=".php" class="button">Check Stats</a></li>
+                <li> <a href="checkstats.php" class="button">Check Stats</a></li>
+            </ul>
+           
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <p>Your Profile</p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Your Username: </h5>
+                                <p>' . $db_username . '</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Your email: </h5>
+                                <p>' . $db_email . '</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Date Registered</h5>
+                                <p>' . $db_date . '</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div><br>';
+    }else{
+        $layout = '
         <div class="row">
             <div class="col-sm-10">
                 <div class="panel panel-default">
@@ -360,6 +431,8 @@ function disp_profile($username)
             <div class="col-sm-2">
             </div>
         </div><br>';
+    }
+
     echo $layout;
 }
 function recapture($capture)
@@ -387,21 +460,44 @@ function recapture($capture)
     }
 }
 
-function confirmDelete($ReplyId){
-	include 'connect.php';
-			$delete = "DELETE FROM `replies` WHERE ReplyId = $ReplyId";
-			
-			if (isset($_SESSION['username'])){
-				
-				if(isset($_POST[$ReplyId])){
-					if(mysqli_query($connect, $delete)){
-						phpAlert("deleted");
-						header("Refresh:0");
-					}else{
-						phpAlert("Fail to delete post");
-						}
-				}
-			}
-			
+function confirmDelete($ReplyId, $TopicId)
+{
+    include 'connect.php'; 
+    if (isset($_SESSION['username']) && isset($_SESSION['admin'])) {
+        if($ReplyId != null){
+            $delete = "DELETE FROM `replies` WHERE ReplyId = $ReplyId";
+            if (mysqli_query($connect, $delete)) {
+                $arr = array('success' => true, 'message' => "Post Deleted");
+                return json_encode($arr);
+            } else {
+                $arr = array('success' => false, 'message' => "Post Not Deleted");
+                return json_encode($arr);
+            }
+        }else if($TopicId != null){
+            $delete = "DELETE FROM topics WHERE TopicId = $TopicId";
+            if (mysqli_query($connect, $delete)) {
+                $delete = "DELETE FROM replies WHERE TopicId = $TopicId";
+                $check = mysqli_query($connect, "SELECT * FROM replies WHERE TopicId = $TopicId");
+                $rows = mysqli_num_rows($check);
+                if ($rows != 0) {
+                    if (mysqli_query($connect, $delete)) {
+                        $arr = array('success' => true, 'message' => "Topic Deleted");
+                        return json_encode($arr);
+                    }else {
+                        $arr = array('success' => false, 'message' => "Topic Not Deleted");
+                        return json_encode($arr);
+                    }
+                }else{
+                    $arr = array('success' => true, 'message' => "Topic Deleted");
+                    return json_encode($arr);
+                }
+            } else {
+                $arr = array('success' => false, 'message' => "Topic Not Deleted");
+                return json_encode($arr);
+            }
+        }
+
+    }
+
 }
 ?>

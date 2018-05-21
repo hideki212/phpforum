@@ -82,6 +82,7 @@ if (isset($_POST['submit'])) {
             $rows = mysqli_num_rows($check);
             if ($rows != 0) {
                 while ($row = mysqli_fetch_assoc($check)) {
+                    $db_admin = $row['admin'];
                     $db_username = $row['username'];
                     $db_password = $row['password'];
                     $db_id = $row['id'];
@@ -89,6 +90,8 @@ if (isset($_POST['submit'])) {
                 if ($username == $db_username && sha1($password) == $db_password) {
                     $_SESSION['username'] = $username;
                     $_SESSION['id'] = $db_id;
+                    if($db_admin == 1)
+                        $_SESSION['admin'] = true;
                     header('Location: index.php');
                 } else {
                     echo 'Incorrect password';
