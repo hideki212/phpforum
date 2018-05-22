@@ -62,13 +62,15 @@ include 'nav.php';
                         if ($_FILES['file']['name'] == "") {
                             $fileNameNew = null;
                         }
-                        $allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'WebM', 'mp4', 'gif');
+                        $allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'webm', 'mp4', 'gif', 'JPG', 'JPEG', 'PNG', 'PDF', 'OGG', 'WEBM', 'MP4', 'GIF');
 
                         if (in_array($fileActualExt, $allowed)) {
                             if ($fileError === 0) {
                                 if ($fileSize < 10000000) {
                                     $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                                    if ($fileType == 'image/jpg' || $fileType == 'image/jpeg' || $fileType == 'image/png' || $fileType == 'image/pdf' || $fileType == 'image/gif') {
+                                    if (strcasecmp('image/jpg',$fileType) ==0||strcasecmp('image/jpeg', $fileType) ==0
+									||strcasecmp('image/png', $fileType)==0 ||strcasecmp('image/pdf',$fileType)==0 
+									||strcasecmp('image/gif',$fileType)==0) {
                                         $fileDestination = 'uploads/images/' . $fileNameNew;
                                     } else {
                                         $fileDestination = 'uploads/videos/' . $fileNameNew;

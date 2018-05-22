@@ -169,7 +169,7 @@ function disptopic($cid, $scid, $tid)
             "</h2><p> Poster : " . $row['Author'] . "</p><p>Date : " . $row['Date_Posted'] . "</p></div>";
         echo "<div class='panel-body'><p>" . $row['Content'] . "</p></div>";
 
-        if ($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4') {
+        if (strcasecmp('video/ogg', $type) == 0 || strcasecmp('video/WebM', $type) == 0 || strcasecmp('video/mp4', $type) == 0) {
             echo "<div class='video-container'><video controls>
 				<source src='uploads/videos/$name' type='$type'>
 				Your browser does not support the video tag.
@@ -178,7 +178,8 @@ function disptopic($cid, $scid, $tid)
 
         }
 
-        if ($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf' || $type == 'image/gif') {
+        if (strcasecmp('image/jpg', $type) == 0 || strcasecmp('image/jpeg', $type) == 0
+        || strcasecmp('image/png', $type) == 0 || strcasecmp('image/pdf', $type) == 0 || strcasecmp('image/gif', $type)) {
             echo "<div class='media'><img src='uploads/images/$name' /></div>";
         } else {
 
