@@ -12,6 +12,18 @@
 <body>
 <?php
 include 'nav.php';
+include 'connect.php';
+if(isset($_POST['submit']) && isset($_SESSION['username']) && isset($_SESSION['admin']) && isset($_POST['name'])){
+  $name = $_POST['name'];
+  $insert = "INSERT INTO categories(Category) VALUES ('$name')";
+  if ($connect->query($insert) === true){
+    header("location: /");
+  }else{
+    echo $insert;
+  }
+}
+
+
 ?>
 
 <div class="container-fluid text-center">  
@@ -21,6 +33,16 @@ include 'nav.php';
       <?php include 'ads.php' ?>
         <?php
         include 'content-function.php';
+        if(isset($_SESSION['username']) && isset($_SESSION['admin'])){
+          echo '<form action="index.php" method="Post">
+          <div class="form-group">
+          <label for="name">Add Main Category :</label>
+          <input class="form-control" type="text" name="name" id="name">
+          <input class="btn btn-primary" type="submit" class="btn btn-default" value="Submit" name="submit">
+      </div>
+    </form>';
+        }
+
         dispcategories();
         ?>
             <?php include 'ads.php' ?>

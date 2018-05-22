@@ -45,6 +45,7 @@ include 'nav.php';
                         $cid = $_GET['cid'];
                         $title = $_POST['title'];
                         $content = $_POST['comment'];
+                        $content = turnUrlIntoHyperlink($content);
 					
 	//upload file 
                         $file = $_FILES['file'];
@@ -106,7 +107,10 @@ include 'nav.php';
                             <ul>
                                 <li><div class="image-upload">
                                 <label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
-                                <input name="file" type="file" class="inputFile" id="file-input"></input>
+                                <input name="file" type="file" class="inputFile" id="file-input" onchange="readURL(this);"></input>
+                                <div id="preview">
+                                
+                                </div>
                                 </div></li>
                             </ul>
                                         <textarea class="form-control" name="comment" id="comment" cols="40" rows="5"></textarea>

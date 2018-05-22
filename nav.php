@@ -4,7 +4,7 @@
       <a class="navbar-brand" href="#">Forum</a>
     </div> -->
     <ul class="nav navbar-nav">
-      <li><a href="/">Home</a></li>
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
       <!-- <li><a href="/newtopics">New Topics</a></li>
       <li><a href="/bestcasinos">Best</a></li>
       <li><a href="/partners">Partners</a></li>  -->
@@ -13,7 +13,7 @@
     session_start();
     if (isset($_SESSION['username'])) {
       echo '<ul class="nav navbar-nav navbar-right">
-            <li><a href="/profile.php"><span class="glyphicon glyphicon-user"></span>Welcome ' . $_SESSION['username'] . '</a></li>
+            <li><a href="/profile.php"><span class="glyphicon glyphicon-user"></span> Welcome ' . $_SESSION['username'] . '</a></li>
             <li><a href="/logout.php"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>';
     } else {

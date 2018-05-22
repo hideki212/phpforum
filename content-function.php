@@ -5,15 +5,15 @@ function dispcategories()
     $select = "SELECT * FROM categories";
     $result = $connect->query($select);
     while ($row = $result->fetch_assoc()) {
-        $cat_id =$row['CategoryId'];
+        $cat_id = $row['CategoryId'];
         echo "<div class='row'>";
         echo "<div class='col-sm-12 fix-panel'>";
         echo "<div class='panel panel-default'>";
         echo "<div class='panel-heading'><h4>";
         echo $row['Category'];
-        if(isset($_SESSION['username']) && isset($_SESSION['admin'])){
+        if (isset($_SESSION['username']) && isset($_SESSION['admin'])) {
             echo "</h4> <div style=''><form action='addCategory.php' method='POST'><input name='parent_id' value='$cat_id' hidden><button type='submit' class='btn btn-primary' style='border: none;' onclick='' name='submit'>Add A Category</button></form></div>";
-        
+
         }
         echo "</div>";
         dispsubcategories($cat_id);
@@ -201,8 +201,10 @@ function replytopost($cid, $scid, $tid)
 										<ul>
 											<li><div class="image-upload">
 											<label for="file-input"><a><i class="fa fa-image"></i></a> Photo/Video</label>
-											<input name="file" type="file" class="inputFile" id="file-input"></input>
-											</div></li>
+											<input name="file" type="file" class="inputFile" id="file-input" onchange="readURL(this);" ></input>
+                                            <div id="preview">
+                                
+                                            </div></div></li>
                                         </ul>
                                         <div class="g-recaptcha" data-sitekey="6LdakFUUAAAAAKhIrniyOdpm9Jo_EIfdZRntvJ2E">
                                 
@@ -250,6 +252,9 @@ function dispreplies($cid, $scid, $tid)
     }
 
     $query = mysqli_query($connect, $select);
+    
+    $rows = mysqli_num_rows($query);
+    if ($rows != 0)
     if (mysqli_num_rows($query) != 0) {
         while ($row = mysqli_fetch_assoc($query)) {
             $ReplyId = $row['ReplyId'];
@@ -294,16 +299,13 @@ function dispreplies($cid, $scid, $tid)
 			}
 			}*/
 
-            if ($type == 'video/ogg' || $type == 'video/WebM' || $type == 'video/mp4') {
+            if (strcasecmp('video/ogg', $type) == 0 || strcasecmp('video/WebM', $type) == 0 || strcasecmp('video/mp4', $type) == 0) {
                 echo "<div class='media'><video width='320' height='240' controls>
 					<source src='uploads/videos/$name' type='$type'>
 					Your browser does not support the video tag.
 					</video></div> ";
-            } else {
-
-            }
-
-            if ($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/pdf' || $type == 'image/gif') {
+            } else if (strcasecmp('image/jpg', $type) == 0 || strcasecmp('image/jpeg', $type) == 0
+                || strcasecmp('image/png', $type) == 0 || strcasecmp('image/pdf', $type) == 0 || strcasecmp('image/gif', $type) == 0) {
                 echo "<div class='media'><img src='uploads/images/$name' style='width:auto; height:auto;'/></div>";
             } else {
 
@@ -358,7 +360,7 @@ function disp_profile($username)
         $db_date = $row['date'];
         $db_id = $row['id'];
     }
-    if(isset($_SESSION['admin'])){
+    if (isset($_SESSION['admin'])) {
         $layout = '
         <div class="row">
             <div class="col-sm-10">
@@ -398,7 +400,7 @@ function disp_profile($username)
             <div class="col-sm-2">
             </div>
         </div><br>';
-    }else{
+    } else {
         $layout = '
         <div class="row">
             <div class="col-sm-10">
@@ -462,32 +464,90 @@ function recapture($capture)
 
 function confirmDelete($ReplyId, $TopicId)
 {
-    include 'connect.php'; 
+    include 'connect.php';
     if (isset($_SESSION['username']) && isset($_SESSION['admin'])) {
-        if($ReplyId != null){
+        if ($ReplyId != null) {
             $delete = "DELETE FROM `replies` WHERE ReplyId = $ReplyId";
-            if (mysqli_query($connect, $delete)) {
-                $arr = array('success' => true, 'message' => "Post Deleted");
-                return json_encode($arr);
-            } else {
-                $arr = array('success' => false, 'message' => "Post Not Deleted");
-                return json_encode($arr);
+            $select = mysqli_query($connect, "SELECT * FROM replies WHERE ReplyId = $ReplyId");
+
+            $rows = mysqli_num_rows($select);
+            if ($rows != 0) {
+                while ($row = mysqli_fetch_assoc($select)) {
+                    $file_name = $row['name'];
+                    $file_type = $row['type'];
+                }
+                if($file_name != "" || $file_name != null){
+                    if (strpos($file_type, "video") == true) {
+                        $dir = "uploads/videos/";
+                    } else {
+                        $dir = "uploads/images/";
+                    }
+                    $file = $dir . $file_name;
+    
+                    if (unlink($file)) {
+                        if (mysqli_query($connect, $delete)) {
+                            $arr = array('success' => true, 'message' => "Post Deleted");
+                            return json_encode($arr);
+                        } else {
+                            $arr = array('success' => false, 'message' => "Post Not Deleted");
+                            return json_encode($arr);
+                        }
+                    } else {
+                        $arr = array('success' => false, 'message' => "Post Not Deleted: error deleting file $file");
+                        return json_encode($arr);
+                    }
+                }else{
+                    if (mysqli_query($connect, $delete)) {
+                        $arr = array('success' => true, 'message' => "Post Deleted");
+                        return json_encode($arr);
+                    } else {
+                        $arr = array('success' => false, 'message' => "Post Not Deleted");
+                        return json_encode($arr);
+                    }
+                }
             }
-        }else if($TopicId != null){
+
+        } else if ($TopicId != null) {
             $delete = "DELETE FROM topics WHERE TopicId = $TopicId";
             if (mysqli_query($connect, $delete)) {
                 $delete = "DELETE FROM replies WHERE TopicId = $TopicId";
                 $check = mysqli_query($connect, "SELECT * FROM replies WHERE TopicId = $TopicId");
                 $rows = mysqli_num_rows($check);
+                $check_delete = array();
                 if ($rows != 0) {
-                    if (mysqli_query($connect, $delete)) {
-                        $arr = array('success' => true, 'message' => "Topic Deleted");
-                        return json_encode($arr);
-                    }else {
-                        $arr = array('success' => false, 'message' => "Topic Not Deleted");
-                        return json_encode($arr);
+                    while ($row = mysqli_fetch_assoc($check)) {
+                        $file_name = $row['name'];
+                        $file_type = $row['type'];
+                        if (strpos($file_type, "video") == true) {
+                            $dir = "uploads/videos/";
+                        } else {
+                            $dir = "uploads/images/";
+                        }
+                        if($file_name != "" || $file_name != null){
+                            $file = $dir . $file_name;
+                            chdir($dir); // Comment this out if you are on the same folder
+                            chown($file_name,465); //Insert an Invalid UserId to set to Nobody Owner; for instance 465
+                            $do = unlink($file);
+                            if ($do =="1") {
+                                array_push($check_delete, true);
+                            } else {
+                                array_push($check_delete, false);
+                            }
+                        }
                     }
-                }else{
+                    if(in_array(false, $check_delete)){
+                        $arr = array('success' => false, 'message' => "1 or more file linked to the current topic was not deleted");
+                        return json_encode($arr);
+                    }else{
+                        if (mysqli_query($connect, $delete)) {
+                            $arr = array('success' => true, 'message' => "Topic Deleted");
+                            return json_encode($arr);
+                        } else {
+                            $arr = array('success' => false, 'message' => "Topic Not Deleted");
+                            return json_encode($arr);
+                        }
+                    }
+                } else {
                     $arr = array('success' => true, 'message' => "Topic Deleted");
                     return json_encode($arr);
                 }
@@ -496,6 +556,28 @@ function confirmDelete($ReplyId, $TopicId)
                 return json_encode($arr);
             }
         }
+
+    }
+
+}
+
+function turnUrlIntoHyperlink($text)
+{
+
+    $reg_exUrl = "/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/";
+
+    if (preg_match($reg_exUrl, $text, $url)) {
+
+        if (strpos($url[0], ":") === false) {
+            $link = 'http://' . $url[0];
+        } else {
+            $link = $url[0];
+        }
+        $hyperLink = preg_replace($reg_exUrl, '<a href="' . $link . '" title="' . $url[0] . '" class="body_links">' . $url[0] . '</a>', $text);
+        return $hyperLink;
+
+    } else {
+        return $text;
 
     }
 

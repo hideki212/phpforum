@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/styles/main.css">
 <meta name="exoclick-site-verification" content="2891f28d79f0d85f18fbf7dfc6ed15b1">
-<script>
+<script type="text/javascript">
 function confirmDelete(ReplyId, TopicId){
 	var a = confirm("asdas");
 	var location = "/delete.php";
@@ -56,27 +56,24 @@ function confirmDelete(ReplyId, TopicId){
 		}
 	}
 }
-function addTopic($parent_id){
-	var location = "/addCategory.php";
-	$.ajax({
-		url: location,
-		type: "POST",
-		data: {
-			topicId : TopicId
-		},
-		success: function(response){
-			alert(response.message);
-			if(response.success == true){
-				window.location.reload(true);
-			}
-		},
-		error: function(jqXHR, textStatus,errorThrown){
-			console.log(textStatus, errorThrown);
-			console.warn(jqXHR.responseText)
-		}
-	});
-}
+function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+				$('#preview').empty();
+                reader.onload = function (e) {
+					if(input.files[0].type.includes('video')){
+						$('#preview').append("<video class='media' width='400' controls> <source src="+ e.target.result +
+						" id='video'>Your browser does not support HTML5 video.</video>");	
+					}else{
+						//$('#preview').attr('src', e.target.result);
+						$('#preview').append("<img class='media' id='image' src="+  e.target.result +">")
+					}
+                    
+                }
 
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 </script>
 <?php 
 ob_start();

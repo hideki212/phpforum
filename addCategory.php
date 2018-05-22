@@ -55,7 +55,7 @@ include 'content-function.php';
                                 
                                 </div>';
 
-                            echo '<br><input class="btn btn-primary btn-xl" type="submit" value="Add" name="submit"> or <a href="register.php">Login</a>
+                            echo '<br><input class="btn btn-primary" type="submit" value="Add" name="submit">
                             </form>';
                         }
 

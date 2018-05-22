@@ -356,3 +356,10 @@ ul.menuItems {
     text-align: center;
     line-height: 50px;
   }
+  .body_links {
+    width: 450px;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

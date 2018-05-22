@@ -12,6 +12,7 @@ if (isset($_SESSION['username'])) {
 			$cid = $_GET['cid'];
 			$scid = $_GET['scid'];
 			$tid = $_GET['tid'];
+			$comment = turnUrlIntoHyperlink($comment);
 			if (strlen($comment) < 30) {
 
 				header('Location: ' . $_SERVER['HTTP_REFERER'] . '&error=1');
@@ -30,15 +31,15 @@ if (isset($_SESSION['username'])) {
 
 				if ($_FILES['file']['name'] == "") {
 					$fileNameNew = null;
-				}
-				if ($fileNameNew != null) {
-					$allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'WebM', 'mp4', 'gif');
+				}else{
+					$allowed = array('jpg', 'jpeg', 'png', 'pdf', 'ogg', 'webm', 'mp4', 'gif', 'JPG', 'JPEG', 'PNG', 'PDF', 'OGG', 'WEBM', 'MP4', 'GIF');
 					if (in_array($fileActualExt, $allowed)) {
 						if ($fileError === 0) {
 							if ($fileSize < 10000000) {
 								$fileNameNew = uniqid('', true) . "." . $fileActualExt;
-								if ($fileType == 'image/jpg' || $fileType == 'image/jpeg' || $fileType == 'image/png' || $fileType == 'image/pdf' ||
-									$fileType == 'image/gif') {
+								if (strcasecmp('image/jpg',$fileType) ==0||strcasecmp('image/jpeg', $fileType) ==0
+									||strcasecmp('image/png', $fileType)==0 ||strcasecmp('image/pdf',$fileType)==0 
+									||strcasecmp('image/gif',$fileType)==0) {
 									$fileDestination = 'uploads/images/' . $fileNameNew;
 								} else {
 									$fileDestination = 'uploads/videos/' . $fileNameNew;
@@ -78,6 +79,7 @@ if (isset($_SESSION['username'])) {
 	echo "<script>alert('you must be logged in ')</script>";
 	header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
+
 
 
 ?>
