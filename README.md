@@ -26,14 +26,14 @@ USER INTERFACE:
 
 
 
-ADMIN INTERFACE
-- add categories 
+ADMIN INTERFACEs
+- add categories DONE 
 - block user
 - remove topic DONE
 - remove reply DONE
-- daily statistics 
+- daily statistics  
 - monthly statistics 
-- new user joined 
+- new user joined  
 - graph for stats
 - best topics 
 - most active

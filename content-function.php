@@ -64,21 +64,34 @@ function getnumtopics($cat_id, $subcat_id)
     $rowcount = mysqli_num_rows($result);
     return $rowcount;
 }
+
+				//call function alert
+function phpAlert($msg)
+{
+    echo '<script language="javascript">';
+    echo 'alert ("' . $msg . '")';
+    echo '</script>';
+}
+            
+           //call function alert
+function phpConfirm()
+{
+    echo '<script language="javascript">';
+    echo '    var r = confirm("Press a button!");
+                    if (r == true) {
+                        return true;
+                    } else {
+                        return false;
+                    }';
+    echo '</script>';
+}
+
 function disptopics($cid, $scid)
 {
     include 'connect.php';
     $select = "SELECT TopicId, Author, Title, Content, Date_Posted, User_Views, replies FROM categories, subcategories, topics
                     WHERE (topics.CategoryId = '$cid') AND (topics.SubcategoryId ='$scid') AND 
                     (categories.CategoryId = '$cid') AND (subcategories.SubcategoryId = '$scid') ORDER BY TopicId DESC";
-					
-				//call function alert
-    function phpAlert($msg)
-    {
-        echo '<script language="javascript">';
-        echo 'alert ("' . $msg . '")';
-        echo '</script>';
-    }
-
 
     $query = mysqli_query($connect, $select);
     if (mysqli_num_rows($query)) {
@@ -229,27 +242,6 @@ function dispreplies($cid, $scid, $tid)
         FROM categories, subcategories, topics, replies WHERE (replies.CategoryId = $cid) 
         AND (replies.SubcategoryId = $scid) AND (replies.TopicId = $tid) AND (topics.TopicId = $tid )
         AND (categories.CategoryId = '$cid') AND (subcategories.SubcategoryId = $scid) ORDER BY ReplyId DESC";
-		
-				//call function alert
-    function phpAlert($msg)
-    {
-        echo '<script language="javascript">';
-        echo 'alert ("' . $msg . '")';
-        echo '</script>';
-    }
-				
-				//call function alert
-    function phpConfirm()
-    {
-        echo '<script language="javascript">';
-        echo '    var r = confirm("Press a button!");
-						if (r == true) {
-							return true;
-						} else {
-							return false;
-						}';
-        echo '</script>';
-    }
 
     $query = mysqli_query($connect, $select);
     
